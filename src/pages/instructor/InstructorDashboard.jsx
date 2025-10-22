@@ -35,7 +35,8 @@ const InstructorDashboard = () => {
 
   const handlePublishCourse = async (courseId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/instructor/courses/${courseId}/publish`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/instructor/courses/${courseId}/publish`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -64,7 +65,8 @@ const InstructorDashboard = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/instructor/courses/${courseId}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/instructor/courses/${courseId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -84,7 +86,8 @@ const InstructorDashboard = () => {
 
   const fetchInstructorData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/instructor/courses', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/instructor/courses`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -248,7 +251,7 @@ const InstructorDashboard = () => {
                       src={course.thumbnail ? (
                         course.thumbnail.startsWith('http') 
                           ? course.thumbnail 
-                          : `http://localhost:5000${course.thumbnail}`
+                          : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${course.thumbnail}`
                       ) : `data:image/svg+xml;base64,${btoa(`<svg width="400" height="225" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`}
                       alt={course.title}
                       className="w-full h-full object-cover"

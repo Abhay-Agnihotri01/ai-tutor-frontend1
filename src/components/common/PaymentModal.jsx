@@ -23,7 +23,8 @@ const PaymentModal = ({ isOpen, onClose, course, onSuccess }) => {
     
     try {
       // Create order
-      const orderResponse = await fetch('http://localhost:5000/api/payments/create-order', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const orderResponse = await fetch(`${apiUrl}/api/payments/create-order`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -68,7 +69,7 @@ const PaymentModal = ({ isOpen, onClose, course, onSuccess }) => {
         handler: async (response) => {
           try {
             // Verify payment
-            const verifyResponse = await fetch('http://localhost:5000/api/payments/verify', {
+            const verifyResponse = await fetch(`${apiUrl}/api/payments/verify`, {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -147,7 +148,7 @@ const PaymentModal = ({ isOpen, onClose, course, onSuccess }) => {
                 src={course?.thumbnail ? (
                   course.thumbnail.startsWith('http') 
                     ? course.thumbnail 
-                    : `http://localhost:5000${course.thumbnail}`
+                    : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${course.thumbnail}`
                 ) : `data:image/svg+xml;base64,${btoa(`<svg width="80" height="60" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="12" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`}
                 alt={course?.title}
                 className="w-20 h-15 rounded object-cover"

@@ -70,7 +70,8 @@ const { id } = useParams();
       const token = localStorage.getItem('token');
       if (!token || !id) return;
       
-      const response = await axios.get(`http://localhost:5000/api/enrollments/video-progress/${id}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${apiUrl}/api/enrollments/video-progress/${id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -122,7 +123,8 @@ const { id } = useParams();
 
   const fetchCourse = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/courses/${id}`);
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${apiUrl}/api/courses/${id}`);
       const course = response.data.course;
       if (course) {
         setCourse(course);
@@ -188,7 +190,7 @@ const { id } = useParams();
           const refreshId = refreshKey;
           const cacheKey = forceRefresh ? `force_${timestamp}_${randomId}_${refreshId}` : `${timestamp}_${randomId}_${refreshId}`;
           
-          const response = await axios.get(`http://localhost:5000/api/quiz/chapter/${chapter.id}?cb=${cacheKey}`, {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/quiz/chapter/${chapter.id}?cb=${cacheKey}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -204,7 +206,7 @@ const { id } = useParams();
             // Fetch attempt status for each quiz
             for (const quiz of response.data.quizzes) {
               try {
-                const attemptResponse = await axios.get(`http://localhost:5000/api/quiz/attempt/status/${quiz.id}?cb=${cacheKey}`, {
+                const attemptResponse = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/quiz/attempt/status/${quiz.id}?cb=${cacheKey}`, {
                   headers: {
                     'Authorization': `Bearer ${token}`,
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -252,7 +254,8 @@ const { id } = useParams();
     }
     
     try {
-      const response = await axios.post('http://localhost:5000/api/quiz/attempt/start', 
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.post(`${apiUrl}/api/quiz/attempt/start`, 
         { quizId: quiz.id },
         {
           headers: {
@@ -370,7 +373,8 @@ const { id } = useParams();
     } else if (currentTextLecture) {
       try {
         const token = localStorage.getItem('token');
-        await axios.post('http://localhost:5000/api/enrollments/mark-content-complete', {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        await axios.post(`${apiUrl}/api/enrollments/mark-content-complete`, {
           courseId: id,
           contentId: currentTextLecture.id,
           contentType: 'text_lecture'
@@ -401,7 +405,8 @@ const { id } = useParams();
       const token = localStorage.getItem('token');
       if (!token) return;
       
-      const response = await axios.get('http://localhost:5000/api/enrollments/my-courses', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${apiUrl}/api/enrollments/my-courses`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -431,7 +436,8 @@ const { id } = useParams();
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/ratings/course/${id}/user`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/ratings/course/${id}/user`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -464,7 +470,8 @@ const { id } = useParams();
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/ratings', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/ratings`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -548,7 +555,7 @@ const { id } = useParams();
                   />
                 ) : (
                   <iframe
-                    src={`http://localhost:5000${currentTextLecture.filePath}`}
+                    src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${currentTextLecture.filePath}`}
                     className="w-full h-full rounded-lg border theme-border"
                     title={currentTextLecture.title}
                   />
@@ -906,7 +913,8 @@ const { id } = useParams();
                                 <button
                                   onClick={() => {
                                     const token = localStorage.getItem('token');
-                                    const url = `http://localhost:5000/api/download/resource/${resource.id}?token=${token}`;
+                                    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                                    const url = `${apiUrl}/api/download/resource/${resource.id}?token=${token}`;
                                     window.open(url, '_blank');
                                   }}
                                   className="flex items-center space-x-1 px-2 py-1 text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800 transition-colors flex-shrink-0"

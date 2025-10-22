@@ -38,7 +38,8 @@ const CourseDetail = () => {
 
   const fetchCourse = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/courses/${id}`);
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${apiUrl}/api/courses/${id}`);
       setCourse(response.data.course);
     } catch (error) {
       console.error('Error fetching course:', error);
@@ -50,7 +51,8 @@ const CourseDetail = () => {
   const fetchRatings = async () => {
     try {
       setRatingsLoading(true);
-      const response = await axios.get(`http://localhost:5000/api/ratings/course/${id}?limit=5`);
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${apiUrl}/api/ratings/course/${id}?limit=5`);
       setRatings(response.data.ratings);
     } catch (error) {
       console.error('Error fetching ratings:', error);
@@ -63,7 +65,8 @@ const CourseDetail = () => {
     if (!isAuthenticated) return;
     
     try {
-      const response = await axios.get('http://localhost:5000/api/enrollments/my-courses', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${apiUrl}/api/enrollments/my-courses`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -82,7 +85,8 @@ const CourseDetail = () => {
     if (!isAuthenticated) return;
     
     try {
-      const response = await axios.get('http://localhost:5000/api/cart', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${apiUrl}/api/cart`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       if (response.data.success) {
@@ -109,7 +113,8 @@ const CourseDetail = () => {
     // For free courses, enroll directly without payment modal
     if (course.price === 0) {
       try {
-        const response = await axios.post('http://localhost:5000/api/enrollments/enroll', 
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const response = await axios.post(`${apiUrl}/api/enrollments/enroll`, 
           { courseId: id },
           {
             headers: {
@@ -250,7 +255,7 @@ const CourseDetail = () => {
                 ) : (
                   <>
                     <img
-                      src={course.thumbnail ? (course.thumbnail.startsWith('http') ? course.thumbnail : `http://localhost:5000${course.thumbnail}`) : 'https://via.placeholder.com/400x225/6366f1/ffffff?text=Course'}
+                      src={course.thumbnail ? (course.thumbnail.startsWith('http') ? course.thumbnail : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${course.thumbnail}`) : 'https://via.placeholder.com/400x225/6366f1/ffffff?text=Course'}
                       alt={course.title}
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -308,7 +313,7 @@ const CourseDetail = () => {
                             rating.user.avatar && rating.user.avatar.startsWith('http')
                               ? rating.user.avatar
                               : rating.user.avatar
-                              ? `http://localhost:5000${rating.user.avatar}`
+                              ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${rating.user.avatar}`
                               : `https://ui-avatars.com/api/?name=${rating.user.firstName}+${rating.user.lastName}&background=6366f1&color=ffffff&size=40`
                           }
                           alt={`${rating.user.firstName} ${rating.user.lastName}`}
@@ -357,7 +362,7 @@ const CourseDetail = () => {
                       course.instructor.avatar && course.instructor.avatar.startsWith('http')
                         ? course.instructor.avatar
                         : course.instructor.avatar
-                        ? `http://localhost:5000${course.instructor.avatar}`
+                        ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${course.instructor.avatar}`
                         : `https://ui-avatars.com/api/?name=${course.instructor.firstName || 'Instructor'}+${course.instructor.lastName || ''}&background=6366f1&color=ffffff&size=64`
                     }
                     alt={`${course.instructor.firstName || 'Instructor'} ${course.instructor.lastName || ''}`}

@@ -43,7 +43,8 @@ const MyLearning = () => {
       console.log('User ID:', user?.id);
       console.log('Fetching enrollments...');
       
-      const response = await fetch('http://localhost:5000/api/enrollments/my-courses', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/enrollments/my-courses`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -131,7 +132,8 @@ const MyLearning = () => {
   const handleRateClick = async (course) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/ratings/course/${course.id}/user`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/ratings/course/${course.id}/user`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -156,7 +158,8 @@ const MyLearning = () => {
   const handleRatingSubmit = async ({ rating, review }) => {
     try {
       const token = localStorage.getItem('token');
-      await fetch('http://localhost:5000/api/ratings', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      await fetch(`${apiUrl}/api/ratings`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

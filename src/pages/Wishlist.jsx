@@ -120,7 +120,7 @@ const Wishlist = () => {
                 {/* Course Image */}
                 <div className="relative">
                   <img
-                    src={item.courses.thumbnail ? (item.courses.thumbnail.startsWith('http') ? item.courses.thumbnail : `http://localhost:5000${item.courses.thumbnail}`) : `data:image/svg+xml;base64,${btoa(`<svg width="400" height="225" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`}
+                    src={item.courses.thumbnail ? (item.courses.thumbnail.startsWith('http') ? item.courses.thumbnail : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${item.courses.thumbnail}`) : `data:image/svg+xml;base64,${btoa(`<svg width="400" height="225" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`}
                     alt={item.courses.title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {

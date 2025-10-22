@@ -772,7 +772,7 @@ const Profile = () => {
                       <img src={avatarPreview} alt="Profile Preview" className="w-32 h-32 rounded-full object-cover" />
                     ) : user.avatar ? (
                       <img 
-                        src={user.avatar.startsWith('http') ? user.avatar : `http://localhost:5000${user.avatar}`} 
+                        src={user.avatar.startsWith('http') ? user.avatar : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.avatar}`} 
                         alt="Profile" 
                         className="w-32 h-32 rounded-full object-cover" 
                       />

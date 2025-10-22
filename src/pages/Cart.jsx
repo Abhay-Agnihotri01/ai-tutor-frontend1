@@ -80,7 +80,8 @@ const Cart = () => {
       toast.loading('Processing checkout...');
       
       // Create order for all courses in cart
-      const response = await fetch('http://localhost:5000/api/payments/create-order', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/payments/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ const Cart = () => {
         handler: async function (response) {
           try {
             // Verify payment
-            const verifyResponse = await fetch('http://localhost:5000/api/payments/verify', {
+            const verifyResponse = await fetch(`${apiUrl}/api/payments/verify`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -214,7 +215,7 @@ const Cart = () => {
                     <div className="flex-shrink-0">
                       <img
                         src={item.courses.thumbnail ? 
-                          (item.courses.thumbnail.startsWith('http') ? item.courses.thumbnail : `http://localhost:5000${item.courses.thumbnail}`) : 
+                          (item.courses.thumbnail.startsWith('http') ? item.courses.thumbnail : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${item.courses.thumbnail}`) : 
                           `data:image/svg+xml;base64,${btoa(`<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="14" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`
                         }
                         alt={item.courses.title}
