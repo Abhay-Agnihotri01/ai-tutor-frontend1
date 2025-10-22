@@ -29,7 +29,7 @@ const CourseCard = ({ course }) => {
         {/* Thumbnail */}
         <div className="relative overflow-hidden">
           <img
-            src={thumbnail ? (thumbnail.startsWith('http') ? thumbnail : `http://localhost:5000${thumbnail}`) : `data:image/svg+xml;base64,${btoa(`<svg width="400" height="225" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`}
+            src={thumbnail ? (thumbnail.startsWith('http') ? thumbnail : `${import.meta.env.VITE_API_URL || 'https://ai-tutor-backend-gq6g.onrender.com'}${thumbnail}`) : `data:image/svg+xml;base64,${btoa(`<svg width="400" height="225" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`}
             alt={title}
             className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
             onError={(e) => {
@@ -64,7 +64,7 @@ const CourseCard = ({ course }) => {
                   instructor.avatar && instructor.avatar.startsWith('http')
                     ? instructor.avatar
                     : instructor.avatar
-                    ? `http://localhost:5000${instructor.avatar}`
+                    ? `${import.meta.env.VITE_API_URL || 'https://ai-tutor-backend-gq6g.onrender.com'}${instructor.avatar}`
                     : `https://ui-avatars.com/api/?name=${instructor.firstName}+${instructor.lastName}&background=6366f1&color=ffffff&size=32`
                 }
                 alt={`${instructor.firstName} ${instructor.lastName}`}

@@ -4,6 +4,7 @@ import { Plus, BookOpen, Users, DollarSign, TrendingUp, Eye, Edit, Trash2, Star 
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/common/Button';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 const InstructorDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -35,25 +36,18 @@ const InstructorDashboard = () => {
 
   const handlePublishCourse = async (courseId) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/instructor/courses/${courseId}/publish`, {
-        method: 'PATCH',
+      const response = await axios.patch(`/api/instructor/courses/${courseId}/publish`, {}, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setCourses(prev => prev.map(course => 
-          course.id === courseId 
-            ? { ...course, isPublished: data.course.isPublished }
-            : course
-        ));
-        toast.success(data.message);
-      } else {
-        throw new Error('Failed to publish course');
-      }
+      setCourses(prev => prev.map(course => 
+        course.id === courseId 
+          ? { ...course, isPublished: response.data.course.isPublished }
+          : course
+      ));
+      toast.success(response.data.message);
     } catch (error) {
       toast.error('Failed to publish course');
     }
@@ -65,20 +59,14 @@ const InstructorDashboard = () => {
     }
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/instructor/courses/${courseId}`, {
-        method: 'DELETE',
+      await axios.delete(`/api/instructor/courses/${courseId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
 
-      if (response.ok) {
-        setCourses(prev => prev.filter(course => course.id !== courseId));
-        toast.success('Course deleted successfully');
-      } else {
-        throw new Error('Failed to delete course');
-      }
+      setCourses(prev => prev.filter(course => course.id !== courseId));
+      toast.success('Course deleted successfully');
     } catch (error) {
       toast.error('Failed to delete course');
     }
@@ -86,26 +74,22 @@ const InstructorDashboard = () => {
 
   const fetchInstructorData = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/instructor/courses`, {
+      const response = await axios.get('/api/instructor/courses', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        setCourses(data.courses || []);
-        
-        // Calculate stats from real data
-        const courses = data.courses || [];
-        setStats({
-          totalCourses: courses.length,
-          totalStudents: courses.reduce((sum, course) => sum + (course.students || 0), 0),
-          totalRevenue: courses.reduce((sum, course) => sum + (course.revenue || 0), 0),
-          avgRating: courses.length > 0 ? courses.reduce((sum, course) => sum + (course.rating || 0), 0) / courses.length : 0
-        });
-      }
+      setCourses(response.data.courses || []);
+      
+      // Calculate stats from real data
+      const courses = response.data.courses || [];
+      setStats({
+        totalCourses: courses.length,
+        totalStudents: courses.reduce((sum, course) => sum + (course.students || 0), 0),
+        totalRevenue: courses.reduce((sum, course) => sum + (course.revenue || 0), 0),
+        avgRating: courses.length > 0 ? courses.reduce((sum, course) => sum + (course.rating || 0), 0) / courses.length : 0
+      });
     } catch (error) {
       console.error('Failed to fetch instructor data:', error);
       toast.error('Failed to load courses');
@@ -251,7 +235,7 @@ const InstructorDashboard = () => {
                       src={course.thumbnail ? (
                         course.thumbnail.startsWith('http') 
                           ? course.thumbnail 
-                          : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${course.thumbnail}`
+                          : `${import.meta.env.VITE_API_URL || 'https://ai-tutor-backend-gq6g.onrender.com'}${course.thumbnail}`
                       ) : `data:image/svg+xml;base64,${btoa(`<svg width="400" height="225" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#6366f1"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dy=".3em">Course</text></svg>`)}`}
                       alt={course.title}
                       className="w-full h-full object-cover"

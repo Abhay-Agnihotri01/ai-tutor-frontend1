@@ -70,7 +70,7 @@ const { id } = useParams();
       const token = localStorage.getItem('token');
       if (!token || !id) return;
       
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://ai-tutor-backend-gq6g.onrender.com';
       const response = await axios.get(`${apiUrl}/api/enrollments/video-progress/${id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -123,7 +123,7 @@ const { id } = useParams();
 
   const fetchCourse = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://ai-tutor-backend-gq6g.onrender.com';
       const response = await axios.get(`${apiUrl}/api/courses/${id}`);
       const course = response.data.course;
       if (course) {
@@ -190,7 +190,7 @@ const { id } = useParams();
           const refreshId = refreshKey;
           const cacheKey = forceRefresh ? `force_${timestamp}_${randomId}_${refreshId}` : `${timestamp}_${randomId}_${refreshId}`;
           
-          const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/quiz/chapter/${chapter.id}?cb=${cacheKey}`, {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL || 'https://ai-tutor-backend-gq6g.onrender.com'}/api/quiz/chapter/${chapter.id}?cb=${cacheKey}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -206,7 +206,7 @@ const { id } = useParams();
             // Fetch attempt status for each quiz
             for (const quiz of response.data.quizzes) {
               try {
-                const attemptResponse = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/quiz/attempt/status/${quiz.id}?cb=${cacheKey}`, {
+                const attemptResponse = await axios.get(`${import.meta.env.VITE_API_URL || 'https://ai-tutor-backend-gq6g.onrender.com'}/api/quiz/attempt/status/${quiz.id}?cb=${cacheKey}`, {
                   headers: {
                     'Authorization': `Bearer ${token}`,
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
